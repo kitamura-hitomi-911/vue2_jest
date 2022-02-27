@@ -1,24 +1,32 @@
 export default {
     props:{
-        item:{
+        form_data:{
             type:Object,
             required:true
+        },
+        values:{
+            type:Object,
+            required:true
+        },
+        item:{
+            type:Object,
         }
     },
     computed:{
         value:{
             get(){
-                return this.item.value;
+                return this.values[this.form_data.name];
             },
             set(val){
                 this.$emit('update',{
-                    name:this.item.name,
+                    name:this.form_data.name,
                     value:val
                 });
             }
         },
         err_msg(){
-            return this.item.err_msgs.join('<br>');
+            return '';
+            //return this.item.err_msgs.join('<br>');
         }
     }
 };

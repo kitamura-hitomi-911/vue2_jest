@@ -1,18 +1,11 @@
 <template>
     <form action="./" method="get" name="frm">
-        <section class="form" v-for="unit_group in unit_groups" :key="unit_group.group_label">
-            <h1>{{unit_group.group_label}}</h1>
-            <div class="form-grp">
-                <template v-for="unit in unit_group.units">
-                    <dl :class="{'is-required': unit.is_requied}" :key="unit.id">
-                        <dt>{{unit.label}}</dt>
-                        <dd>
-                            <component v-for="item in unit.items" :key="item.name" :is="item.component_name" :item="item" @update="update"></component>
-                        </dd>
-                    </dl>
-                </template>
-            </div>
-        </section>
+        <dl v-for="form_parts in form_parts_list" :key="form_parts.id">
+            <dt>{{form_parts.ttl_label}}</dt>
+            <dd>
+                <component v-for="form_data in form_parts.form_data_list" :key="form_data.name" :is="form_data.component" :form_data="form_data" :values="values" :errors="errors" @update="update"></component>
+            </dd>
+        </dl>
         <div class="form-btn_area">
             <p class="btn btn-submit"><a href="#" @click.prevent="onClickSubmit">送信</a></p>
         </div>
@@ -20,6 +13,7 @@
 </template>
 
 <script>
+    import { mapState, mapActions } from 'vuex'
     import FormInputText from '@/components/FormInputText';
     import FormInputNumber from '@/components/FormInputNumber';
     import FormInputDate from '@/components/FormInputDate';
@@ -42,6 +36,7 @@
             }
         },
         computed:{
+            ...mapState('test',['form_parts_list','values','errors']),
             item_by_name(){
                 return this.unit_groups.reduce((ret_obj, group) =>{
                     return group.units.reduce((acc,unit) => {
@@ -103,7 +98,10 @@
             FormTextarea
         },
         methods:{
+            ...mapActions('test',['setValues']),
             update(update_obj){
+                this.setValues(update_obj);
+                /*
                 if(Array.isArray(this.item_by_name[update_obj.name].value)){
                     // 配列の場合は1回リセットして入れなおす
                     this.item_by_name[update_obj.name].value.splice(0);
@@ -118,7 +116,7 @@
                 // ovserved_item があれば処理
                 this.observed_item[update_obj.name] && this.observed_item[update_obj.name].forEach( observer =>{
                     observer.callback.call(observer._this,update_obj);
-                });
+                });*/
             },
             // 未入力チェック
             _checkEmpty(item){
