@@ -25,7 +25,7 @@ export default [
                 name:'hoge1',
                 label:'1行テキスト',
                 component:'FormInputText',
-                placeholder: '入力してください',
+                placeholder: '',
                 minlength: 2,
                 maxlength: 8,
                 required: true

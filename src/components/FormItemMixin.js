@@ -11,9 +11,6 @@ export default {
         errors:{
             type:Object,
             required:true
-        },
-        item:{
-            type:Object,
         }
     },
     computed:{
