@@ -30,7 +30,6 @@
     export default {
         data:function(){
             return {
-                observed_item:{}
             }
         },
         computed:{
