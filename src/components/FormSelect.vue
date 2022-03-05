@@ -1,10 +1,10 @@
 <template>
     <div class="form-item">
-        <p class="form-item-ttl" v-if="item.label">{{item.label}}</p>
+        <p class="form-item-ttl" v-if="form_data.label">{{form_data.label}}</p>
         <div class="form-select">
-            <p class="form-select-label">{{lebel_selected}}</p>
-            <select :name="item.name" v-model="value" :disabled="item.disabled">
-                <option :value="option.value" v-for="option in item.list" :key="option.value" :disabled="option.disabled">{{option.label}}</option>
+            <p class="form-select-label">{{label_selected}}</p>
+            <select :name="form_data.name" v-model="value" :disabled="form_data.disabled">
+                <option :value="option.value" v-for="option in form_data.list" :key="option.value" :disabled="option.disabled">{{option.label}}</option>
             </select>
         </div>
         <p class="form-err" v-if="err_msg" v-html="err_msg"></p>
@@ -17,9 +17,9 @@
     export default {
         mixins:[FormItemMixin],
         computed:{
-            lebel_selected(){
-                return this.item.list.reduce((acc,option)=> {
-                    return option.value == this.item.value ? option.label : acc;
+            label_selected(){
+                return this.form_data.list.reduce((acc,option)=> {
+                    return option.value == this.form_data.value ? option.label : acc;
                 },'');
             }
         },

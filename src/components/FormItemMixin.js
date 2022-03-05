@@ -8,6 +8,10 @@ export default {
             type:Object,
             required:true
         },
+        errors:{
+            type:Object,
+            required:true
+        },
         item:{
             type:Object,
         }
@@ -19,14 +23,12 @@ export default {
             },
             set(val){
                 this.$emit('update',{
-                    name:this.form_data.name,
-                    value:val
+                    [this.form_data.name]:val
                 });
             }
         },
         err_msg(){
-            return '';
-            //return this.item.err_msgs.join('<br>');
+            return this.errors[this.form_data.name].join('<br>');
         }
     }
 };

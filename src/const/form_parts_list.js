@@ -25,7 +25,6 @@ export default [
                 name:'hoge1',
                 label:'1行テキスト',
                 component:'FormInputText',
-                type:'text',
                 placeholder: '入力してください',
                 minlength: 2,
                 maxlength: 8,
@@ -35,7 +34,6 @@ export default [
                 name: 'hoge9',
                 label: 'メールアドレス',
                 component:'FormInputText',
-                type: 'text',
                 placeholder: '入力してください',
                 pattern: '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}$',
                 required: true
@@ -44,7 +42,6 @@ export default [
                 name: 'hoge10',
                 label: '電話番号',
                 component:'FormInputText',
-                type: 'text',
                 placeholder: '00-0000-0000',
                 pattern: '^\\d{2,4}-\\d{3,4}-\\d{3,4}$',
                 required: true,
@@ -96,7 +93,10 @@ export default [
                         value: 'checkbox3',
                     }
                 ],
-                required: true
+                required: true,
+                err_msgs: {
+                    not_select: '1つ以上選択必須です'
+                }
             },
             {
                 label: 'テキストエリア',
@@ -104,16 +104,12 @@ export default [
                 component:'FormTextarea',
                 placeholder: '候補2を選択した場合は詳細を記入。\nよろしく',
                 required: true,
-                observe: [
-                    {
-                        name: 'hoge3',
-                        changeCallback(observed_item) {
-                            // this が observer の この item 自身。またここはアロー関数では動作しない
-                            this.disabled = !(observed_item.value.includes('checkbox2'));
-                        },
-                        init: true
+                onOtherValueChanged:{
+                    hoge3({current_value,other_value,current_form_data}){
+                        console.log(current_value, other_value,current_form_data);
+                        current_form_data.disabled = other_value.includes('checkbox2')
                     }
-                ]
+                },
             },
             {
                 label: 'プルダウン',
@@ -142,7 +138,7 @@ export default [
             {
                 label: 'Number',
                 name: 'hoge6',
-                component:'FormInputText',
+                component:'FormInputNumber',
                 type: 'number',
                 min: 3,
                 max: 10,
@@ -151,8 +147,7 @@ export default [
             {
                 label: '日付',
                 name: 'hoge7',
-                component:'FormInputText',
-                type: 'date',
+                component:'FormInputDate',
                 min: '2020-03-22',
                 max: '2021-03-21',
                 required: true,
@@ -164,8 +159,7 @@ export default [
             {
                 label: '時間',
                 name: 'hoge8',
-                component:'FormInputText',
-                type: 'time',
+                component:'FormInputTime',
                 min: '08:00',
                 max: '21:00',
                 required: true,

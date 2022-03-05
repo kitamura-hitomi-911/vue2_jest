@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import test from './modules/test'
+import params from './modules/params'
 
 Vue.use(Vuex)
 
@@ -12,6 +12,6 @@ export default new Vuex.Store({
   actions: {
   },
   modules: {
-    test
+    params
   }
 })
