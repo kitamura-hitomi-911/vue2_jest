@@ -35,6 +35,7 @@ describe('FormInputText.vue', () => {
   it('props の反映確認', () => {
     propsDataList.forEach(async (propsData) => {
       const wrapper = mount(FormInputText, {
+        store,
         localVue,
         propsData
       });
@@ -50,41 +51,21 @@ describe('FormInputText.vue', () => {
       // v-model の value は element.value で取る
       expect(input.element.value).toBe(propsData.values[propsData.form_data.name]);
       await input.setValue('hoge');
-      expect(input.element.value).toBe('hoge');
+      // wrapper.vm.$emit('foo',123)
+      // wrapper.emitted() は次のオブジェクトを返します:
+      // {
+      //   foo: [[], [123]]
+      // }
+      // ＃payloadの内容が配列に格納されて配列で格納される
+      // オブジェクトの比較は toEqual を使用
+      expect(wrapper.emitted().update).toBeTruthy();
+      expect(wrapper.emitted().update[0][0]).toEqual({[propsData.form_data.name]:'hoge'})
       await input.setValue(1234);
-      expect(input.element.value).toBe('1234');// form からとるときは文字列になっちゃうね。
-
-
-      /*
-
-
-      if(tgt_prop.form_data.value !== void 0 && tgt_prop.item.value){
-        expect(input.element.value).toBe(tgt_prop.item.value);
-      }
-      if(tgt_prop.item.placeholder !== void 0){
-        expect(input.attributes().placeholder).toBe(tgt_prop.item.placeholder);
-      }
-      if(tgt_prop.item.minlength !== void 0){
-        expect(input.attributes().minlength).toBe(tgt_prop.item.minlength + '');
-      }
-      if(tgt_prop.item.maxlength !== void 0){
-        expect(input.attributes().maxlength).toBe(tgt_prop.item.maxlength + '');
-      }*/
-      // expect(wrapper.vm).toBeTruthy()
-      // expect(wrapper.text()).toMatch('hoge')
+      // 続けて更新した場合は添え字が1になる
+      expect(wrapper.emitted().update[1][0]).toEqual({[propsData.form_data.name]:'1234'})
+      // emit後、storeをたたかないので、ここでstoreをたたいてもしょうがない
+      // console.log(wrapper.vm.$store.state.params.values[propsData.form_data.name]);
+      // expect(store.state.params.values[propsData.form_data.name]).toBe('1234');
     })
   });
-
-  /*
-  it('value更新の確認', async () => {
-    const wrapper = mount(FormInputText, {
-      localVue,
-      propsData: tgt_props[0]
-    })
-    const changedPropsData = tgt_props[0].item.value = 'bar';
-
-    await wrapper.setProps(changedPropsData)
-    const input = wrapper.find('input');
-    expect(input.element.value).toBe('bar');
-  });*/
 })
