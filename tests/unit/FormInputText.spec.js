@@ -2,10 +2,24 @@
 import Vuex from 'vuex'
 import { createLocalVue, mount } from '@vue/test-utils'
 import FormInputText from '@/components/FormInputText.vue'
-import store from '@/store'
+import { cloneDeep } from 'lodash' // devにsaveしないと？
+import _params from '@/store/modules/params';
 
 const localVue = createLocalVue();
 localVue.use(Vuex)
+
+const store = new Vuex.Store({
+  state: {
+  },
+  mutations: {
+  },
+  actions: {
+  },
+  modules: {
+    params:cloneDeep(_params) // 他のテストに影響されないように
+  }
+})
+
 
 describe('FormInputText.vue', () => {
   // このコンポーネントが呼ばれる form_data のリストを作成
@@ -18,20 +32,6 @@ describe('FormInputText.vue', () => {
       errors:store.state.params.errors
     }
   });
-
-  const propsData = {
-    form_data:{
-      name:'hoge1',
-      label:'1行テキスト',
-      component:'FormInputText',
-      placeholder: '入力してください',
-      minlength: 2,
-      maxlength: 8,
-      required: true
-    },
-    values:store.state.params.values,
-    errors:store.state.params.errors
-  };
   it('props の反映確認', () => {
     propsDataList.forEach(async (propsData) => {
       const wrapper = mount(FormInputText, {

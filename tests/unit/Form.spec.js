@@ -1,14 +1,27 @@
 import Vuex from 'vuex'
-import { createLocalVue, shallowMount } from '@vue/test-utils'
+import { createLocalVue, mount } from '@vue/test-utils'
 import Form from '@/components/Form.vue'
-import store from '@/store'
+import { cloneDeep } from 'lodash'
+import _params from '@/store/modules/params';
 
 const localVue = createLocalVue();
 localVue.use(Vuex)
 
+const store = new Vuex.Store({
+  state: {
+  },
+  mutations: {
+  },
+  actions: {
+  },
+  modules: {
+    params:cloneDeep(_params)
+  }
+})
+
 describe('Form.vue', () => {
-  it('props の反映確認', () => {
-    const wrapper = shallowMount(Form, {
+  it('ソース出力確認', () => {
+    const wrapper = mount(Form, {
       store,
       localVue,
     });
